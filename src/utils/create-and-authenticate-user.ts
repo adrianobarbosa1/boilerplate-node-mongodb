@@ -1,4 +1,4 @@
-import { prisma } from "@/database/prismaClient";
+import { prisma } from "@/model/prismaClient";
 import { hash } from "bcryptjs";
 import { FastifyInstance } from "fastify";
 import request from "supertest";

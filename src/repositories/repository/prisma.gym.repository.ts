@@ -1,4 +1,4 @@
-import { prisma } from "@/database/prismaClient";
+import { prisma } from "@/model/prismaClient";
 import { Gym, Prisma } from "@prisma/client";
 import { FindManyNearbyParams, GymRepository } from "../gyms.repository";
 

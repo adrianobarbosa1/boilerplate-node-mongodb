@@ -1,5 +1,5 @@
 import { app } from "@/app";
-import { prisma } from "@/database/prismaClient";
+import { prisma } from "@/model/prismaClient";
 import { createAndAuthenticateUser } from "@/utils/create-and-authenticate-user";
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
