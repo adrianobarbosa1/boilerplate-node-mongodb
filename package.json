@@ -33,6 +33,7 @@
     "dotenv": "16.4.1",
     "fastify": "^4.25.2",
     "mongoose": "8.1.1",
+    "mongoose-paginate-v2": "1.8.0",
     "sqlite3": "^5.1.7",
     "validator": "13.11.0",
     "zod": "^3.22.4"
