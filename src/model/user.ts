@@ -1,32 +1,22 @@
 import { roles } from "@/config/roles";
+import toJSON from "@/utils/toJSON";
 import mongoose from "mongoose";
+import paginate from "mongoose-paginate-v2";
 import validator from "validator";
-import { CheckinAttrs } from "./checkin";
 
-interface UserAttrs {
-  nome: string;
+export interface IUser {
+  name: string;
   email: string;
-  password: string;
-  role: string;
-  isEmailVerified: boolean;
-  checkin: CheckinAttrs[];
-}
-
-interface UserDoc extends mongoose.Document {
-  nome: string;
-  email: string;
-  password: string;
+  passwordHash: string;
   role: string;
   isEmailVerified: boolean;
 }
 
-interface UserModel extends mongoose.Model<UserDoc> {
-  build(attrs: UserAttrs): UserDoc;
-}
+interface IUserDoc extends mongoose.Document, IUser {}
 
 const userSchema = new mongoose.Schema(
   {
-    nome: {
+    name: {
       type: String,
       required: true,
     },
@@ -67,21 +57,15 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.password;
-        delete ret.__v;
-      },
-    },
   }
 );
 
-userSchema.statics.build = (attrs: UserAttrs) => {
-  return new User(attrs);
-};
+userSchema.plugin(toJSON);
+userSchema.plugin(paginate);
 
-const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
+const User = mongoose.model<IUserDoc, mongoose.PaginateModel<IUserDoc>>(
+  "User",
+  userSchema
+);
 
-export { User };
+export default User;
