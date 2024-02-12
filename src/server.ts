@@ -1,14 +1,20 @@
+import mongoose from "mongoose";
 import { app } from "./app";
 import { env } from "./config";
-import { prisma } from "./model/prismaClient";
 import { DatabaseConnectionError } from "./useCases/errors/database-connection-error";
 import { startLoadingEffect, stopLoadingEffect } from "./utils/loadingEffect";
 
+const mongoUri =
+  process.env.NODE_ENV === "dev"
+    ? process.env.DATABASE_LOCAL
+    : process.env.DATABASE_URL;
+
 const start = async () => {
   let loadingInterval: NodeJS.Timeout | null = null;
+
   try {
     loadingInterval = startLoadingEffect();
-    await prisma.$connect();
+    await mongoose.connect(mongoUri!);
     stopLoadingEffect(loadingInterval);
     console.log("Connected to database ✅");
 
