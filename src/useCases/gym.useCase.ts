@@ -15,15 +15,13 @@ export class GymUseCase {
     title,
     description,
     phone,
-    latitude,
-    longitude,
+    location,
   }: GymCreateUseCaseRequest): Promise<GymCreateUseCaseResponse> {
     const gym = await this.gymRepository.create({
       title,
       description,
       phone,
-      latitude,
-      longitude,
+      location,
     });
 
     return {
@@ -32,10 +30,10 @@ export class GymUseCase {
   }
 
   async getAllGyms({
-    query,
+    filter,
     page,
   }: GetAllGymsUseCaseRequest): Promise<GetAllGymsUseCaseResponse> {
-    const gyms = await this.gymRepository.searchMany(query, page);
+    const gyms = await this.gymRepository.searchMany(filter, page);
 
     return {
       gyms,

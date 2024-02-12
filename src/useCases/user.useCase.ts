@@ -28,7 +28,7 @@ export class UserUseCase {
       email,
       passwordHash,
     });
-
+    console.log("USER REPOSITORY", user);
     return {
       user,
     };

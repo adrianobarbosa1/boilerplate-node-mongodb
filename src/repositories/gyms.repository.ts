@@ -1,4 +1,5 @@
-import { Gym, Prisma } from "@prisma/client";
+import { IGym, IGymDoc } from "@/model/gym";
+import { PaginateResult } from "mongoose";
 
 export interface FindManyNearbyParams {
   latitude: number;
@@ -6,8 +7,8 @@ export interface FindManyNearbyParams {
 }
 
 export interface GymRepository {
-  create(data: Prisma.GymCreateInput): Promise<Gym>;
-  findById(id: string): Promise<Gym | null>;
-  findManyNearby(params: FindManyNearbyParams): Promise<Gym[]>;
-  searchMany(query: string, page: number): Promise<Gym[]>;
+  create(data: IGym): Promise<IGymDoc>;
+  findById(id: string): Promise<IGymDoc | null>;
+  findManyNearby(params: FindManyNearbyParams): Promise<IGymDoc[]>;
+  searchMany(filter: string, page: number): Promise<PaginateResult<IGymDoc>>;
 }

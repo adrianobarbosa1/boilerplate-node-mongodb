@@ -1,4 +1,4 @@
-import { CheckIn } from "@prisma/client";
+import { ICheckinDoc } from "@/model/checkin";
 
 export interface CheckInCreateUseCaseRequest {
   userId: string;
@@ -7,7 +7,7 @@ export interface CheckInCreateUseCaseRequest {
   userLongitude: number;
 }
 export interface CheckInCreateUseCaseResponse {
-  checkIn: CheckIn;
+  checkIn: ICheckinDoc;
 }
 
 //---------------GET ALL CHEKINS------------------------
@@ -16,7 +16,7 @@ export interface CheckInGetAllUseCaseRequest {
   page: number;
 }
 export interface CheckInGetAllUseCaseResponse {
-  checkIns: CheckIn[];
+  checkIns: ICheckinDoc[];
 }
 
 //---------------GETALLCHEKINSBYUSERID CHEKINS------------------------
@@ -32,5 +32,5 @@ export interface ValidateCheckinRequest {
   checkInId: string;
 }
 export interface ValidateCheckinResponse {
-  checkIn: CheckIn;
+  checkIn: ICheckinDoc;
 }

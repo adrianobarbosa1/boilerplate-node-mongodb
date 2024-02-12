@@ -1,23 +1,28 @@
-import { Gym } from "@prisma/client";
+import { IGymDoc } from "@/model/gym";
+import { PaginateResult } from "mongoose";
+
+interface Location {
+  type: string;
+  coordinates: number[];
+}
 
 export interface GymCreateUseCaseRequest {
   title: string;
-  description: string | null;
-  phone: string | null;
-  latitude: number;
-  longitude: number;
+  description: string | undefined;
+  phone: string | undefined;
+  location: Location;
 }
 export interface GymCreateUseCaseResponse {
-  gym: Gym;
+  gym: IGymDoc;
 }
 
 //---------------GETALLGYMS GYMS------------------------
 export interface GetAllGymsUseCaseRequest {
-  query: string;
+  filter: string;
   page: number;
 }
 export interface GetAllGymsUseCaseResponse {
-  gyms: Gym[];
+  gyms: PaginateResult<IGymDoc>;
 }
 
 //---------------findNearbGyms GYMS------------------------
@@ -26,5 +31,5 @@ export interface FindNearbGymsUseCaseRequest {
   userLongitude: number;
 }
 export interface FindNearbGymsUseCaseResponse {
-  gyms: Gym[];
+  gyms: IGymDoc[];
 }

@@ -1,20 +1,14 @@
-import mongoose from "mongoose";
+import toJSON from "@/utils/toJSON";
+import mongoose, { Types } from "mongoose";
+import paginate from "mongoose-paginate-v2";
 
-export interface CheckinAttrs {
-  userId: string;
-  gymId: string;
+export interface ICheckin {
+  userId: Types.ObjectId;
+  gymId: Types.ObjectId;
   validatedAt: Date;
 }
 
-interface CheckinDoc extends mongoose.Document {
-  userId: string;
-  gymId: string;
-  validatedAt: Date;
-}
-
-interface CheckinModel extends mongoose.Model<CheckinDoc> {
-  build(attrs: CheckinAttrs): CheckinDoc;
-}
+export interface ICheckinDoc extends mongoose.Document, ICheckin {}
 
 const checkinSchema = new mongoose.Schema(
   {
@@ -35,23 +29,15 @@ const checkinSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
   }
 );
 
-checkinSchema.statics.build = (attrs: CheckinAttrs) => {
-  return new Checkin(attrs);
-};
+checkinSchema.plugin(toJSON);
+checkinSchema.plugin(paginate);
 
-const Checkin = mongoose.model<CheckinDoc, CheckinModel>(
-  "Checkin",
-  checkinSchema
-);
+const Checkin = mongoose.model<
+  ICheckinDoc,
+  mongoose.PaginateModel<ICheckinDoc>
+>("Checkin", checkinSchema);
 
-export { Checkin };
+export default Checkin;

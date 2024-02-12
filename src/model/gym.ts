@@ -1,29 +1,20 @@
-import { roles } from "@/config/roles";
+import toJSON from "@/utils/toJSON";
 import mongoose from "mongoose";
-import validator from "validator";
-import { CheckinAttrs } from "./checkin";
+import paginate from "mongoose-paginate-v2";
 
-interface GymAttrs {
+interface Location {
+  type: string;
+  coordinates: number[];
+}
+
+export interface IGym {
   title: string;
   description?: string;
   phone?: string;
-  latitude: string;
-  longitude: string;
-  checkin: CheckinAttrs[];
+  location: Location;
 }
 
-interface GymDoc extends mongoose.Document {
-  title: string;
-  description?: string;
-  phone?: string;
-  latitude: string;
-  longitude: string;
-  checkin: CheckinAttrs[];
-}
-
-interface GymModel extends mongoose.Model<GymDoc> {
-  build(attrs: GymAttrs): GymDoc;
-}
+export interface IGymDoc extends mongoose.Document, IGym {}
 
 const gymSchema = new mongoose.Schema(
   {
@@ -35,57 +26,40 @@ const gymSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    email: {
+    phone: {
       type: String,
       required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-      validate(value: string) {
-        if (!validator.isEmail(value)) {
-          throw new Error("Invalid email");
-        }
+    },
+    // checkin: [
+    //   {
+    //     type: mongoose.SchemaTypes.ObjectId,
+    //     ref: "Chekin",
+    //     required: true,
+    //   },
+    // ],
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
       },
-    },
-    passwordHash: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 8,
-      validate(value: string) {
-        if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-          throw new Error(
-            "Password must contain at least one letter and one number"
-          );
-        }
+      coordinates: {
+        type: [Number],
+        required: true,
       },
-    },
-    role: {
-      type: String,
-      enum: roles,
-      default: "user",
-    },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
     },
   },
   {
     timestamps: true,
-    toJSON: {
-      transform(doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
   }
 );
 
-gymSchema.statics.build = (attrs: GymAttrs) => {
-  return new Gym(attrs);
-};
+gymSchema.plugin(toJSON);
+gymSchema.plugin(paginate);
 
-const Gym = mongoose.model<GymDoc, GymModel>("Gym", gymSchema);
+const Gym = mongoose.model<IGymDoc, mongoose.PaginateModel<IGymDoc>>(
+  "Gym",
+  gymSchema
+);
 
-export { Gym };
+export default Gym;

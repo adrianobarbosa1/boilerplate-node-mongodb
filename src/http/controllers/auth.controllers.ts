@@ -10,18 +10,18 @@ async function authRegister(req: FastifyRequest, res: FastifyReply) {
 
   try {
     const userUseCase = makeUserUsercase();
-    await userUseCase.create({
+    const user = await userUseCase.create({
       name,
       email,
       password,
     });
+    console.log("USER CONTROLLER", user);
+    return res.status(201).send(user);
   } catch (err) {
     if (err instanceof BadRequestError) {
       return res.status(err.statusCode).send({ message: err.message });
     }
   }
-
-  return res.status(201).send();
 }
 
 async function authLogin(req: FastifyRequest, res: FastifyReply) {

@@ -1,16 +1,10 @@
 import { UsersRepository } from "@/repositories/users.repository";
 import { NotAuthorizedError } from "@/useCases/errors/not-authorized-error";
-import { User } from "@prisma/client";
 import { compare } from "bcryptjs";
-
-interface AuthenticateUseCaseRequest {
-  email: string;
-  password: string;
-}
-
-interface AuthenticateUseCaseResponse {
-  user: User;
-}
+import {
+  AuthenticateUseCaseRequest,
+  AuthenticateUseCaseResponse,
+} from "./authenticate.types";
 
 export class AuthenticateUseCase {
   constructor(private authRepository: UsersRepository) {}

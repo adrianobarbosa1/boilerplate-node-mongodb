@@ -1,6 +1,5 @@
-import { User } from "@prisma/client";
+import { UserDoc } from "@/model/user";
 
-//USER
 //---------------CREATE USER------------------------
 export interface UserCreateUseCaseRequest {
   name: string;
@@ -8,7 +7,7 @@ export interface UserCreateUseCaseRequest {
   password: string;
 }
 export interface UserCreateUseCaseResponse {
-  user: User;
+  user: UserDoc;
 }
 
 //---------------GETUSERPROFILE USER------------------------
@@ -16,5 +15,5 @@ export interface UserGetProfileUseCaseRequest {
   userId: string;
 }
 export interface UserGetProfileUseCaseResponse {
-  user: User;
+  user: UserDoc;
 }
