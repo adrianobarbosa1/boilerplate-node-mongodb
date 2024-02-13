@@ -1,5 +1,3 @@
-import { BadRequestError } from "@/useCases/errors/bad-request-error";
-import { makeCheckinUseCase } from "@/useCases/factory/make.checkin.useCase";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { checkinValidation } from "../validations/checkin.validations";
 

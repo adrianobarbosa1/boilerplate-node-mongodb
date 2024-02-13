@@ -3,8 +3,8 @@ import fastifyJwt from "@fastify/jwt";
 import fastify from "fastify";
 import { ZodError } from "zod";
 import { env } from "./config";
+import { InternalServerError } from "./errors/internal-server-error";
 import { appRoutes } from "./http/routes";
-import { InternalServerError } from "./useCases/errors/internal-server-error";
 
 export const app = fastify();
 
@@ -32,7 +32,7 @@ app.setErrorHandler((error, req, res) => {
     });
   }
 
-  if (env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "prod") {
     console.error(error);
   } else {
     // ferramenta de observalidade

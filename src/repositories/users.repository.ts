@@ -1,7 +1,7 @@
-import { IUserDoc, IUserInput } from "@/model/user";
+import { IUserInput, User } from "@/model/user";
 
 export interface UsersRepository {
-  create(data: IUserInput): Promise<IUserDoc>;
-  findById(id: string): Promise<IUserDoc | null>;
-  findByEmail(email: string): Promise<IUserDoc | null>;
+  create(data: IUserInput): Promise<User>;
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
 }

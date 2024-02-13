@@ -1,5 +1,3 @@
-import { BadRequestError } from "@/useCases/errors/bad-request-error";
-import { makeGymUseCase } from "@/useCases/factory/make.gym.useCase";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { gymValidation } from "../validations/gym.validations";
 

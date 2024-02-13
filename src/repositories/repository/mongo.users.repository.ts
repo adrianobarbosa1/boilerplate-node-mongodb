@@ -1,4 +1,5 @@
 import User, { IUserInput } from "@/model/user";
+import { NotFoundError } from "@/useCases/errors/not-found-error";
 import { UsersRepository } from "../users.repository";
 
 export class MongoUsersRepository implements UsersRepository {
@@ -9,6 +10,7 @@ export class MongoUsersRepository implements UsersRepository {
 
   async findById(id: string) {
     const user = await User.findById(id);
+    if (!user) throw new NotFoundError();
     return user;
   }
 

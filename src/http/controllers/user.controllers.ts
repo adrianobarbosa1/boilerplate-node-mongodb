@@ -1,9 +1,8 @@
-import { makeUserUsercase } from "@/useCases/factory/make.user.useCase";
+import { userService } from "@/service/user.service";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 async function userMe(req: FastifyRequest, res: FastifyReply) {
-  const userUseCase = makeUserUsercase();
-  const { user } = await userUseCase.getUserProfile({
+  const { user } = await userService.getUserProfile({
     userId: req.user.sub,
   });
 

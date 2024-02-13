@@ -1,24 +1,15 @@
 import { roles } from "@/config/roles";
-import mongoose, { Schema } from "mongoose";
+import * as mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import validator from "validator";
 
-export interface IUserInput {
+export interface User extends Document {
   name: string;
   email: string;
   passwordHash: string;
 }
-export interface IUser {
-  name: string;
-  email: string;
-  passwordHash: string;
-  role?: string;
-  isEmailVerified?: boolean;
-}
 
-export interface IUserDoc extends mongoose.Document, IUser {}
-
-const userSchema: Schema<IUserDoc> = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -74,7 +65,7 @@ const userSchema: Schema<IUserDoc> = new mongoose.Schema(
 
 userSchema.plugin(paginate);
 
-const User = mongoose.model<IUserDoc, mongoose.PaginateModel<IUserDoc>>(
+const User = mongoose.model<User, mongoose.PaginateModel<User>>(
   "User",
   userSchema
 );

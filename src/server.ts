@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { app } from "./app";
 import { env } from "./config";
-import { DatabaseConnectionError } from "./useCases/errors/database-connection-error";
+import { DatabaseConnectionError } from "./errors/database-connection-error";
 import { startLoadingEffect, stopLoadingEffect } from "./utils/loadingEffect";
 
 const mongoUri =
