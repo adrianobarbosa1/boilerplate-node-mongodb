@@ -1,28 +1,46 @@
 import { z } from "zod";
 
 const gymRegister = z.object({
-  title: z.string(),
+  title: z.string().min(1),
   description: z.string().nullable(),
   phone: z.string().nullable(),
-  latitude: z.number().refine((value) => {
-    return Math.abs(value) <= 90;
-  }),
-  longitude: z.number().refine((value) => {
-    return Math.abs(value) <= 180;
+  location: z.object({
+    type: z.literal("Point"),
+    coordinates: z
+      .array(z.number())
+      .length(2)
+      .refine(
+        ([longitude, latitude]) => {
+          return Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180;
+        },
+        {
+          message:
+            "As coordenadas devem ser válidas: [-180 <= longitude <= 180, -90 <= latitude <= 90]",
+        }
+      ),
   }),
 });
 
 const gymSearch = z.object({
-  query: z.string(),
+  filter: z.string(),
   page: z.coerce.number().min(1).default(1),
 });
 
 const gymNearby = z.object({
-  latitude: z.coerce.number().refine((value) => {
-    return Math.abs(value) <= 90;
-  }),
-  longitude: z.coerce.number().refine((value) => {
-    return Math.abs(value) <= 180;
+  location: z.object({
+    type: z.literal("Point"),
+    coordinates: z
+      .array(z.number())
+      .length(2)
+      .refine(
+        ([longitude, latitude]) => {
+          return Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180;
+        },
+        {
+          message:
+            "As coordenadas devem ser válidas: [-180 <= longitude <= 180, -90 <= latitude <= 90]",
+        }
+      ),
   }),
 });
 

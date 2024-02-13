@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 const authRegister = z.object({
-  name: z.string(),
-  email: z.string().email(),
+  name: z.string().min(1),
+  email: z.string().email().min(1),
   password: z.string().min(6),
 });
 
 const authLogin = z.object({
-  email: z.string().email(),
+  email: z.string().email().min(1),
   password: z.string().min(6),
 });
 

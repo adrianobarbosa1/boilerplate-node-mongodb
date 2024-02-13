@@ -8,11 +8,11 @@
     "email": "adriano.barbosa100@gmail.com"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev tsx watch src/server.ts",
+    "dev": "cross-env NODE_ENV=dev tsx watch src/server.ts --no-deprecation",
     "start": "node buils/server.js",
     "build": "tsup src --out-dir build",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "vitest",
+    "test:unit": "vitest --run",
     "test:coverage": "vitest --coverage",
     "test:ui": "vitest --ui"
   },
@@ -20,6 +20,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
+    "@types/jest": "29.5.12",
     "@types/node": "^20.11.17",
     "@types/supertest": "6.0.2",
     "@types/validator": "13.11.9",

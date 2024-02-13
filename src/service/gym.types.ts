@@ -1,4 +1,4 @@
-import { IGymDoc } from "@/model/gym";
+import { Gym } from "@/model/gym";
 import { PaginateResult } from "mongoose";
 
 interface Location {
@@ -6,30 +6,29 @@ interface Location {
   coordinates: number[];
 }
 
-export interface GymCreateUseCaseRequest {
+export interface GymCreateRequest {
   title: string;
-  description: string | undefined;
-  phone: string | undefined;
+  description?: string | null;
+  phone?: string | null;
   location: Location;
 }
-export interface GymCreateUseCaseResponse {
-  gym: IGymDoc;
+export interface GymCreateResponse {
+  gym: Gym;
 }
 
 //---------------GETALLGYMS GYMS------------------------
-export interface GetAllGymsUseCaseRequest {
-  filter: string;
-  page: number;
+export interface GetAllGymsRequest {
+  filter?: string;
+  page?: number;
 }
-export interface GetAllGymsUseCaseResponse {
-  gyms: PaginateResult<IGymDoc>;
+export interface GetAllGymsResponse {
+  gyms: PaginateResult<Gym>;
 }
 
 //---------------findNearbGyms GYMS------------------------
-export interface FindNearbGymsUseCaseRequest {
-  userLatitude: number;
-  userLongitude: number;
+export interface FindNearbGymsRequest {
+  location: Location;
 }
-export interface FindNearbGymsUseCaseResponse {
-  gyms: IGymDoc[];
+export interface FindNearbGymsResponse {
+  gyms: Gym[];
 }

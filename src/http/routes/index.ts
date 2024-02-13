@@ -1,9 +1,9 @@
 import { FastifyInstance } from "fastify";
 
 import { authRoute } from "./auth.route";
-import { checkinRoute } from "./checkin.route";
 import { gymRoute } from "./gym.route";
 import { userRoute } from "./user.route";
+// import { checkinRoute } from "./checkin.route";
 
 const defaultRoutes = [
   {
@@ -18,10 +18,10 @@ const defaultRoutes = [
     path: "/gyms",
     route: gymRoute,
   },
-  {
-    path: "/checkins",
-    route: checkinRoute,
-  },
+  // {
+  //   path: "/checkins",
+  //   route: checkinRoute,
+  // },
 ];
 
 // const devRoutes = [

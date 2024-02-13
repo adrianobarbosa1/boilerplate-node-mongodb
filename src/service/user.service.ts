@@ -1,7 +1,7 @@
-import User from "@/model/user";
 import { hash } from "bcryptjs";
 import { BadRequestError } from "../errors/bad-request-error";
 import { NotFoundError } from "../errors/not-found-error";
+import User from "../model/user";
 import {
   UserCreateRequest,
   UserCreateResponse,
@@ -24,7 +24,6 @@ const create = async ({
     email,
     passwordHash,
   });
-
   return { user };
 };
 

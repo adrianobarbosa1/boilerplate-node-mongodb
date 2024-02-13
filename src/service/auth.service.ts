@@ -1,6 +1,6 @@
-import User from "@/model/user";
+import { NotAuthorizedError } from "@/errors/not-authorized-error";
 import { compare } from "bcryptjs";
-import { NotAuthorizedError } from "../errors/not-authorized-error";
+import User from "../model/user";
 import { AuthRequest, AuthResponse } from "./auth.types";
 
 const login = async ({
@@ -8,10 +8,33 @@ const login = async ({
   password,
 }: AuthRequest): Promise<AuthResponse> => {
   const user = await User.findOne({ email });
-  if (!user) throw new NotAuthorizedError();
+  if (!user) {
+    throw new NotAuthorizedError();
+  }
 
   const doesPassMatches = await compare(password, user.passwordHash);
-  if (!doesPassMatches) throw new NotAuthorizedError();
+  if (!doesPassMatches) {
+    throw new NotAuthorizedError();
+  }
+
+  return {
+    user,
+  };
+};
+
+const refreshToken = async ({
+  email,
+  password,
+}: AuthRequest): Promise<AuthResponse> => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new NotAuthorizedError();
+  }
+
+  const doesPassMatches = await compare(password, user.passwordHash);
+  if (!doesPassMatches) {
+    throw new NotAuthorizedError();
+  }
 
   return {
     user,
@@ -20,4 +43,5 @@ const login = async ({
 
 export const authService = {
   login,
+  refreshToken,
 };

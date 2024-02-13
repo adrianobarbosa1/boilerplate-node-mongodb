@@ -1,4 +1,5 @@
 import { BadRequestError } from "@/errors/bad-request-error";
+import { NotAuthorizedError } from "@/errors/not-authorized-error";
 import { authService } from "@/service/auth.service";
 import { userService } from "@/service/user.service";
 import { FastifyReply, FastifyRequest } from "fastify";
@@ -6,13 +7,13 @@ import { authValidation } from "../validations/auth.validations";
 
 async function authRegister(req: FastifyRequest, res: FastifyReply) {
   const { name, email, password } = authValidation.authRegister.parse(req.body);
-
   try {
     const user = await userService.create({
       name,
       email,
       password,
     });
+
     return res.status(201).send({ user });
   } catch (err) {
     if (err instanceof BadRequestError) {
@@ -31,26 +32,13 @@ async function authLogin(req: FastifyRequest, res: FastifyReply) {
     });
 
     const token = await res.jwtSign(
-      {
-        role: user.role,
-      },
-      {
-        sign: {
-          sub: user.id,
-        },
-      }
+      { role: user.role },
+      { sign: { sub: user.id } }
     );
 
     const refreshToken = await res.jwtSign(
-      {
-        role: user.role,
-      },
-      {
-        sign: {
-          sub: user.id,
-          expiresIn: "1d",
-        },
-      }
+      { role: user.role },
+      { sign: { sub: user.id, expiresIn: "1d" } }
     );
 
     return res
@@ -72,38 +60,42 @@ async function authLogin(req: FastifyRequest, res: FastifyReply) {
 }
 
 async function refreshToken(req: FastifyRequest, res: FastifyReply) {
-  await req.jwtVerify({ onlyCookie: true });
+  try {
+    await req.jwtVerify({ onlyCookie: true });
 
-  const { role } = req.user;
+    const { role } = req.user;
 
-  const token = await res.jwtSign(
-    { role },
-    {
-      sign: {
-        sub: req.user.sub,
-      },
-    }
-  );
+    const token = await res.jwtSign(
+      { role },
+      {
+        sign: {
+          sub: req.user.sub,
+        },
+      }
+    );
 
-  const refreshToken = await res.jwtSign(
-    { role },
-    {
-      sign: {
-        sub: req.user.sub,
-        expiresIn: "1d",
-      },
-    }
-  );
+    const refreshToken = await res.jwtSign(
+      { role },
+      {
+        sign: {
+          sub: req.user.sub,
+          expiresIn: "1d", // 1 dia para expirar
+        },
+      }
+    );
 
-  return res
-    .setCookie("refreshToken", refreshToken, {
-      path: "/",
-      secure: true,
-      sameSite: true,
-      httpOnly: true,
-    })
-    .status(200)
-    .send({ token });
+    return res
+      .setCookie("refreshToken", refreshToken, {
+        path: "/",
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      })
+      .status(200)
+      .send({ token });
+  } catch (err) {
+    throw new NotAuthorizedError();
+  }
 }
 
 export const authController = {

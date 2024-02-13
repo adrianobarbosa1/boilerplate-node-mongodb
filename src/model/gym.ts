@@ -1,5 +1,5 @@
 import toJSON from "@/utils/toJSON";
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
 interface Location {
@@ -7,14 +7,12 @@ interface Location {
   coordinates: number[];
 }
 
-export interface IGym {
+export interface Gym extends Document {
   title: string;
   description?: string;
   phone?: string;
   location: Location;
 }
-
-export interface IGymDoc extends mongoose.Document, IGym {}
 
 const gymSchema = new mongoose.Schema(
   {
@@ -30,21 +28,16 @@ const gymSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // checkin: [
-    //   {
-    //     type: mongoose.SchemaTypes.ObjectId,
-    //     ref: "Chekin",
-    //     required: true,
-    //   },
-    // ],
     location: {
       type: {
         type: String,
         enum: ["Point"],
+        default: "Point",
         required: true,
       },
       coordinates: {
         type: [Number],
+        default: [0, 0],
         required: true,
       },
     },
@@ -57,9 +50,8 @@ const gymSchema = new mongoose.Schema(
 gymSchema.plugin(toJSON);
 gymSchema.plugin(paginate);
 
-const Gym = mongoose.model<IGymDoc, mongoose.PaginateModel<IGymDoc>>(
-  "Gym",
-  gymSchema
-);
+gymSchema.index({ location: "2dsphere" });
+
+const Gym = mongoose.model<Gym, mongoose.PaginateModel<Gym>>("Gym", gymSchema);
 
 export default Gym;

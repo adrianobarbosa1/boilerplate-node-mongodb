@@ -1,12 +1,14 @@
-import { roles } from "@/config/roles";
 import * as mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import validator from "validator";
+import { roles } from "../config/roles";
 
 export interface User extends Document {
+  id: string;
   name: string;
   email: string;
   passwordHash: string;
+  role?: string;
 }
 
 const userSchema = new mongoose.Schema(
