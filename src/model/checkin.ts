@@ -1,14 +1,14 @@
 import toJSON from "@/utils/toJSON";
-import mongoose, { Types } from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
-export interface ICheckin {
+export interface Checkin extends Document {
+  id: string;
   userId: Types.ObjectId;
   gymId: Types.ObjectId;
   validatedAt: Date;
+  createdAt: Date;
 }
-
-export interface ICheckinDoc extends mongoose.Document, ICheckin {}
 
 const checkinSchema = new mongoose.Schema(
   {
@@ -35,9 +35,9 @@ const checkinSchema = new mongoose.Schema(
 checkinSchema.plugin(toJSON);
 checkinSchema.plugin(paginate);
 
-const Checkin = mongoose.model<
-  ICheckinDoc,
-  mongoose.PaginateModel<ICheckinDoc>
->("Checkin", checkinSchema);
+const Checkin = mongoose.model<Checkin, mongoose.PaginateModel<Checkin>>(
+  "Checkin",
+  checkinSchema
+);
 
 export default Checkin;

@@ -9,6 +9,7 @@ export interface User extends Document {
   email: string;
   passwordHash: string;
   role?: string;
+  createdAt: Date;
 }
 
 const userSchema = new mongoose.Schema(

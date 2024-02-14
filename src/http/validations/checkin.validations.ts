@@ -1,11 +1,23 @@
 import { z } from "zod";
 
 const checkinRegister = z.object({
-  latitude: z.number().refine((value) => {
-    return Math.abs(value) <= 90;
+  gymId: z.string().refine((value) => {
+    return /^[0-9a-fA-F]{24}$/.test(value);
   }),
-  longitude: z.number().refine((value) => {
-    return Math.abs(value) <= 180;
+  userLocation: z.object({
+    type: z.literal("Point"),
+    coordinates: z
+      .array(z.number())
+      .length(2)
+      .refine(
+        ([longitude, latitude]) => {
+          return Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180;
+        },
+        {
+          message:
+            "As coordenadas devem ser válidas: [-180 <= longitude <= 180, -90 <= latitude <= 90]",
+        }
+      ),
   }),
 });
 
